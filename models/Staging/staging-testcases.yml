@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: stg_products
+#   description: product master data loading from product source file
+    description: "{{doc('product')}}"
+    columns:
+      - name: productid
+#       description: uniquly identifying product
+        description: "{{doc('productid')}}"
+        tests:
+          - unique
+          - not_null
+      - name: productname
+        tests: 
+          - not_null    
+ 
+  - name: stg_shipments
+    description: Shipment details loaded from shipment source file
+    columns:
+      - name: status
+        tests:
+         - accepted_values:
+            values:
+              - "shipped"
+              - "returned"
+              - "ordered"
+              - "replaced"
+
+
+  - name: stg_orderdetails
+    description: Staging order details from source
+    columns:
+      - name: orderid
+        description: unique identifier of order 
+        tests: 
+          - relationships:
+             field: orderid
+             to: ref('stg_orders')
+
+
+  - name: stg_customers
+    columns:
+      - name: customerid
+        tests:
+          - is_even
+          
+  - name: stg_employees
+    columns:
+      - name: employeeid
+#       tests:
+#          - is_even
+                    
